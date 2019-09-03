@@ -14,29 +14,36 @@ class Config
      * Database host
      * @var string
      */
-    const DB_HOST = 'your-database-host';
+    const DB_HOST = '159.65.197.227';
 
     /**
      * Database name
      * @var string
      */
-    const DB_NAME = 'your-database-name';
+    const DB_NAME = 'webbudget';
 
     /**
      * Database user
      * @var string
      */
-    const DB_USER = 'your-database-user';
+    const DB_USER = 'budgetuser';
 
     /**
      * Database password
      * @var string
      */
-    const DB_PASSWORD = 'your-database-password';
+    const DB_PASSWORD = '1234';
+
+    /**
+     * Database port
+     * @var string
+     */
+    const DB_PORT = '5433';
 
     /**
      * Show or hide error messages on screen
      * @var boolean
      */
     const SHOW_ERRORS = true;
+    const SECRET_KEY='iQ7mMEe77hrMQe5tdN0gHzWic0XC05SL';
 }

@@ -23,7 +23,7 @@ abstract class Model
         static $db = null;
 
         if ($db === null) {
-            $dsn = 'mysql:host=' . Config::DB_HOST . ';dbname=' . Config::DB_NAME . ';charset=utf8';
+            $dsn = 'pgsql:host=' . Config::DB_HOST . ';dbname=' . Config::DB_NAME . ';port='.Config::DB_PORT.";options='-c client_encoding=utf8'";
             $db = new PDO($dsn, Config::DB_USER, Config::DB_PASSWORD);
 
             // Throw an Exception when an error occurs

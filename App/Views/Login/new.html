@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+
+{% block body %}
+<div class="col-6 mx-auto">Logowanie
+        <form action="/login/create" method="post">
+            <div class="form-group">
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="icon-user"></i></div>
+                    </div>
+                    <input type="text" class="form-control" id="uzytkownik" name="email" placeholder="użytkownik lub email" autofocus value="{{ email}}">
+                </div>
+                <div class="input-group mb-2">
+                    <div class="input-group-prepend">
+                        <div class="input-group-text"><i class="icon-key"></i></div>
+                    </div>
+                    <input type="password" class="form-control" id="haslo" name="pass" placeholder="hasło">
+                </div>
+                <div>
+                    <label>
+                        <input type="checkbox" name="remember_me"/>Remember me
+                    </label>
+                </div>
+            </div>                                      
+            <button class="btn btn-primary btn-block" type="submit" role="button" ><i class="icon-login"></i> Zaloguj</button>
+        </form>
+    </div>
+
+
+
+
+{% endblock %}
