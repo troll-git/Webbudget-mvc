@@ -1,45 +1,44 @@
 {% extends "base.html" %}
 
-{% block title %}Main{% endblock %}
+{% block title %}Welcome{% endblock %}
 
 
 {% block body %}
 <header>
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+        <a class="navbar-brand" href="/main/new">Web Budget</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenu"
+                aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainMenu">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/main/income"><i class="icon-down-big"></i>Dodaj przychód</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/main/expense"><i class="icon-up-big"></i> Dodaj wydatek</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/main/balance"><i class="icon-doc-text"></i> Przeglądaj bilans</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout"><i class="icon-logout"></i>Wyloguj się</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#"><i class="icon-cog"></i> Ustawienia</a>
+                </li>
+            </ul>
+        </div>
+        <div class="loginflag">{{current_user.username}}<i class="icon-user"></i></div>
+    </nav>
+</header>
 
-        <nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
-            <a class="navbar-brand" href="mainMenu.php">Web Budget</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenu"
-                    aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="mainMenu">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="income.php"><i class="icon-down-big"></i>Dodaj przychód</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="expense.php"><i class="icon-up-big"></i> Dodaj wydatek</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="balance.php"><i class="icon-doc-text"></i> Przeglądaj bilans</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/logout"><i class="icon-logout"></i>Wyloguj się</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="icon-cog"></i> Ustawienia</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="loginflag">{{current_user.username}}<i class="icon-user"></i></div>
-        </nav>
-
-    </header>
     <div class="view intro-2" style="">
         <div class="full-bg-img">
             <div class="mask rgba-purple-light flex-center">
                 <div class="container text-center fadeInUp" style="padding-top: 15%">
-                    <h1>Witaj {{current_user.username}} Co chcesz teraz zrobić?</h1>
+                    <h1>Witaj {{current_user.username}}!</h1>
                 </div>
             </div>
         </div>

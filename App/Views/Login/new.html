@@ -4,6 +4,11 @@
 
 
 {% block body %}
+<header>
+        <nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+            <a class="navbar-brand" href="/">Web Budget</a>
+        </nav>
+</header>
 <div class="col-6 mx-auto">Logowanie
         <form action="/login/create" method="post">
             <div class="form-group">
@@ -21,15 +26,12 @@
                 </div>
                 <div>
                     <label>
-                        <input type="checkbox" name="remember_me"/>Remember me
+                        <input type="checkbox" name="remember_me"/>Pamietaj mnie
                     </label>
                 </div>
             </div>                                      
             <button class="btn btn-primary btn-block" type="submit" role="button" ><i class="icon-login"></i> Zaloguj</button>
         </form>
     </div>
-
-
-
 
 {% endblock %}
