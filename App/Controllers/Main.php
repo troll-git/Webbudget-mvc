@@ -52,10 +52,18 @@ class Main extends Authenticated
     }    
     public function createBalanceAction()
     {
-        $inc=Balance::getIncomes();
-        $exp=Balance::getExpenses();
-        //var_dump($IncomesTable,$ExpTable);
-        View::renderTemplate('Main/balance.html');
+        $inc=Income::getIncomes();
+        $incomecat=Income::getIncomeCat();
+        $exp=Expense::getExpenses();
+        $expensecat=Expense::getExpenseCat();
+        
+        $result=[];
+        $result['incomes']=$inc;
+        $result['incomes_sum']=Income::getSumIncomes($inc);
+        $result['expenses']=$exp;
+        $result['expenses_sum']=Expense::getSumExpenses($exp);
+        //var_dump(Expense::getSumExpenses($exp));
+        View::renderTemplate('Main/balance.html',$result);
     }
     
 }
