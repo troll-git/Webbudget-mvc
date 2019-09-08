@@ -36,7 +36,7 @@ class Main extends Authenticated
     {
         $income= new Income($_POST);
         $income->save();
-        Flash::addMessage('Pomyslnie dodano nowy przychod');
+        Flash::addMessage('Pomyslnie dodano nowy przychod',FLASH::INFO);
         $this->redirect('/main/income');
 
         //var_dump($_POST);
@@ -45,7 +45,7 @@ class Main extends Authenticated
     {
         $expense= new Expense($_POST);
         $expense->save();
-        Flash::addMessage('Pomyslnie dodano nowy wydatek');
+        Flash::addMessage('Pomyslnie dodano nowy wydatek',FLASH::INFO);
         $this->redirect('/main/expense');
 
         //var_dump($_POST);
@@ -63,6 +63,21 @@ class Main extends Authenticated
         $result['expenses']=$exp;
         $result['expenses_sum']=Expense::getSumExpenses($exp);
         //var_dump(Expense::getSumExpenses($exp));
+        if (empty($inc)){
+            Flash::addMessage('Brak przychodow w wybranym okresie',FLASH::INFO);
+        }
+        if (empty($exp)){
+            Flash::addMessage('Brak wydatkow w wybranym okresie',FLASH::INFO);
+        }
+        $balance=new Balance;
+        $saldo=$balance->getBalance(Income::getSumIncomes($inc),Expense::getSumExpenses($exp));
+        $result['balance']=$saldo;
+        if($saldo<=0){
+            $result['infobalance']='Jesteś na minusie. Musisz oszczędzać';
+        }
+        else {
+            $result['infobalance']='Nieźle zarządzasz pieniędzmi. Tak trzymać!';
+        }
         View::renderTemplate('Main/balance.html',$result);
     }
     

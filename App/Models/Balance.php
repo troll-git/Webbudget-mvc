@@ -60,4 +60,9 @@ class Balance extends \Core\Model
     $range[]=$date_to;
     return $range;
     }    
+    public function getBalance($incomes,$expenses)
+    {
+        $balance=$incomes-$expenses;
+        return $balance;
+    }
 }

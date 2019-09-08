@@ -1,43 +1,12 @@
-{% extends "base.html" %}
+{% extends "authenticated.html" %}
 
 {% block title %}Bilans{% endblock %}
 
 
 {% block body %}
-<header>
-    <nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
-        <a class="navbar-brand" href="/main/new">Web Budget</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenu"
-                aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="mainMenu">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="/main/income"><i class="icon-down-big"></i>Dodaj przychód</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/main/expense"><i class="icon-up-big"></i> Dodaj wydatek</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/main/balance"><i class="icon-doc-text"></i> Przeglądaj bilans</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/logout"><i class="icon-logout"></i>Wyloguj się</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="icon-cog"></i> Ustawienia</a>
-                </li>
-            </ul>
-        </div>
-        <div class="loginflag">{{current_user.username}}<i class="icon-user"></i></div>
-    </nav>
-</header>
 
 <section>
-        {% if incomes is empty %}
-        <div class="b_line b_motivation shadow">Brak przychodów w wybranym okresie</div>
-        {% endif %}
+        
         {% if incomes is not empty %}
         <div id="incomes" class="col-sm-5 col-md-5 col-lg-5">
                 <table>
@@ -62,9 +31,7 @@
                 </table>                
             </div>
         {% endif %}
-        {% if expenses is empty %}
-        <div class="b_line b_motivation shadow">Brak wydatków w wybranym okresie</div>
-        {% endif %}
+        
         {% if expenses is not empty %}
         <div id="expenses" class="col-sm-5 col-md-5 col-lg-5" >
                 <table>
@@ -87,7 +54,9 @@
                     </tfoot>
                     
                 </table>
-            </div>
+        </div>
+            
+           
         {% endif %}
         
     </section>
@@ -109,6 +78,9 @@
 
             </div>
         </div>
+
+       
+        
        
 
         <div class="modal fade" id="niestandardoweModal" tabindex="-1" role="dialog" aria-labelledby="zakresDat" aria-hidden="true">
@@ -135,5 +107,28 @@
         <button class="btn btn-primary btn-block" id="showBalance" onclick="showDiv()" type="submit" >Zatwierdź</button>      
     </aside>
     </form>
+
+    {% if balance is not empty %}
+    <div class="modal fade" id="balanceModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Bilans:</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+
+            <div class="modal-body">
+              <p>Twój bilans wynosi {{ balance }}.</p>
+              <p>{{ infobalance }}</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
 
 {% endblock %}

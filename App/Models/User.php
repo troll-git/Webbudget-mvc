@@ -60,6 +60,47 @@ class User extends \Core\Model
         return false;
     }
 
+    public function copyCategories()
+    {
+        $userData= static::findByEmail($this->email);
+        $db = static::getDB();
+        $qgetCopyIncomes=$db->prepare("SELECT * from public.incomes_category_default");
+        $qgetCopyIncomes->execute();
+        $copyIncomes=$qgetCopyIncomes->fetchAll();
+        foreach ($copyIncomes as $income){
+             $qinsertIncome=$db->prepare("INSERT INTO public.incomes_category_assigned_to_users VALUES ( :user_id, :name,:id)");
+             $qinsertIncome->bindValue(':user_id',$userData->id,PDO::PARAM_INT);
+             $qinsertIncome->bindValue(':name',$income['name'],PDO::PARAM_STR);
+             $qinsertIncome->bindValue(':id',$income['id'],PDO::PARAM_INT);
+             $qinsertIncome->execute();              
+        }
+        //copy expenses
+        $qgetCopyExp=$db->prepare("SELECT * from public.expenses_category_default");
+        $qgetCopyExp->execute();
+        $copyExp=$qgetCopyExp->fetchAll();
+        foreach ($copyExp as $exp){
+             $qinsertExp=$db->prepare("INSERT INTO public.expenses_category_assigned_to_users VALUES ( :user_id, :name,:id)");
+             $qinsertExp->bindValue(':user_id',$userData->id,PDO::PARAM_INT);
+             $qinsertExp->bindValue(':name',$exp['name'],PDO::PARAM_STR);
+             $qinsertExp->bindValue(':id',$exp['id'],PDO::PARAM_INT);
+             $qinsertExp->execute();              
+        }
+        //copy payment methods
+        $qgetCopyPay=$db->prepare("SELECT * from public.payment_methods_default");
+        $qgetCopyPay->execute();
+        $copyPay=$qgetCopyPay->fetchAll();
+        foreach ($copyPay as $pay){
+             $qinsertPay=$db->prepare("INSERT INTO public.payment_methods_assigned_to_users VALUES ( :user_id, :name,:id)");
+             $qinsertPay->bindValue(':user_id',$userData->id,PDO::PARAM_INT);
+             $qinsertPay->bindValue(':name',$pay['name'],PDO::PARAM_STR);
+             $qinsertPay->bindValue(':id',$pay['id'],PDO::PARAM_INT);
+             $qinsertPay->execute();              
+        }
+
+
+
+    }
+
      /**
      * Validate current property values, adding valiation error messages to the errors array property
      *

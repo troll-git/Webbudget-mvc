@@ -21,9 +21,10 @@ class Login extends \Core\Controller
         if ($user) {
             Auth::login($user,$remember_me);
             Flash::addMessage('Pomyslnie zalogowano');
+            //var_dump($user);
             $this->redirect('/main/new');
         } else {
-            Flash::addMessage('Nieudana proba logowania, sprobuj jeszcze raz');
+            Flash::addMessage('Nieudana proba logowania, sprobuj jeszcze raz',FLASH::WARNING);
             View::renderTemplate('Login/new.html', [
                 'email' => $_POST['email']
             ]);

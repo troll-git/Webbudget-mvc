@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet"/> 
+    <link rel="stylesheet" type="text/css" href="/cssbs/bootstrap.min.css"/>      
+    <link rel="stylesheet" type="text/css" href="/style.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/fontello.css"/>
+    <script src="/time.js" type="text/javascript" ></script>
+    <script src="/jquery-3.4.1.min.js" type="text/javascript"></script>
+    <script src="/modal.js" type="text/javascript"></script>
+</head>
+<body onload="setToday();">
+    <header>
+        <nav class="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar">
+            <a class="navbar-brand" href="/main/new">Web Budget</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainMenu"
+                    aria-controls="mainMenu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainMenu">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/main/income"><i class="icon-down-big"></i>Dodaj przychód</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/main/expense"><i class="icon-up-big"></i> Dodaj wydatek</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/main/balance"><i class="icon-doc-text"></i> Przeglądaj bilans</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout"><i class="icon-logout"></i>Wyloguj się</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="icon-cog"></i> Ustawienia</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="loginflag">{{current_user.username}}<i class="icon-user"></i></div>
+        </nav>
+    </header>
+    {% for message in flash_messages %}
+    <div class="alert alert-{{message.type}}" role="alert">
+            {{ message.body }}
+    </div>
+    {% endfor %}
+    {% block body %}
+    {% endblock %}
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+
+    <script src="/jsbs/bootstrap.min.js"></script>
+    
+    {% block footer %}
+    {% endblock %}
+</body>

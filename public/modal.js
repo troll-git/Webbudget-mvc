@@ -11,3 +11,7 @@ $('#balanceRange').change(function() {
     }
 });
 });
+
+$(document).ready(function(){        
+    $('#balanceModal').modal('show');
+     }); 

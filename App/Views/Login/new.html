@@ -9,6 +9,11 @@
             <a class="navbar-brand" href="/">Web Budget</a>
         </nav>
 </header>
+{% for message in flash_messages %}
+<div class="alert alert-{{message.type}}" role="alert">
+        {{ message.body }}
+</div>
+{% endfor %}
 <div class="col-6 mx-auto">Logowanie
         <form action="/login/create" method="post">
             <div class="form-group">
