@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Flash;
 use \Core\View;
 use \App\Models\User;
 
@@ -32,8 +33,11 @@ class Signup extends \Core\Controller
         $user = new User($_POST);
         if($user->save()){
             $user->copyCategories();
-            $this->redirect('/signup/success');
+            Flash::addMessage('Rejestracja przebiegla pomyslnie');
+            $this->redirect('/login/new');
         } else {
+
+            Flash::addMessage('Nieudana rejestracja, sprobuj jeszcze raz.',Flash::WARNING);
             View::renderTemplate('Signup/new.html',[
                 'user'=>$user]);
             
