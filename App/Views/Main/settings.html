@@ -1,0 +1,113 @@
+{% extends "authenticated.html" %}
+
+{% block title %}Ustawienia{% endblock %}
+
+
+{% block body %}
+<div class="col-6 mx-auto">
+
+    <div id="accordion">
+        <div class="card">
+          <div class="card-header" id="headingOne">
+            <h5 class="mb-0">
+              <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                Edytuj kategorie przychodow
+              </button>
+            </h5>
+          </div>
+          <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+            <div class="card-body">
+                {% for cats in income_cat %}
+                <div class="form-group">
+                        <div class="input-group-prepend mb-2">
+                                <div class="input-group-text">
+                                    {{ cats.name }}
+                                </div>
+                                <button class="btn btn-primary pull-right" type="submit" data-toggle="modal" id={{cats.name}} data-target="#editIncomeCatModal{{cats.id}}">edytuj</button>
+                                <button class="btn btn-primary" type="submit">usun</button>
+                            </div>
+                </div>
+                <div class="modal fade" id="editIncomeCatModal{{cats.id}}" tabindex="-1" role="dialog">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title">Edytuj kategorie przychodow</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                              <div class="form-group">
+                                      <label>nazwa kategorii</label>
+                                      
+                                      <input type="text" id="cats.name" class="form-control" value="{{cats.name}}">
+                              </div>
+                      </div>
+                      <div class="modal-footer">
+                        <a href="#" data-role="update" data-id="{{cats.id}}" id="editIncomes" class="btn btn-primary pull-right">Zapisz</a>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>    
+                {% endfor %}
+                <button class="btn btn-primary btn-block" type="submit">Dodaj kategorie</button>
+
+                
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header" id="headingTwo">
+            <h5 class="mb-0">
+              <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                Edytuj kategorie wydatkow
+              </button>
+            </h5>
+          </div>
+          <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+            <div class="card-body">
+                    {% for cats in expense_cat %}
+                    <tr><td>{{ cats.name }}{{cats.id}}</td></tr>
+                    <br>
+
+                    {% endfor %}
+                    <button class="btn btn-primary btn-block" type="submit">Zatwierdź</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header" id="headingThree">
+            <h5 class="mb-0">
+              <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    Edytuj metody platnosci
+              </button>
+            </h5>
+          </div>
+          <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+            <div class="card-body">
+                    {% for cats in pay_cat %}
+                    <tr><td>{{ cats.name }}</td></tr>
+                    <br>
+                    {% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="card">
+                <div class="card-header" id="headingFour">
+                  <h5 class="mb-0">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseFour">
+                          Edytuj Uzytkownika
+                    </button>
+                  </h5>
+                </div>
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                  <div class="card-body">
+                        
+                  </div>
+                </div>
+              </div>
+      </div>
+
+</div>
+{% endblock %}

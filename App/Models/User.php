@@ -96,8 +96,39 @@ class User extends \Core\Model
              $qinsertPay->bindValue(':id',$pay['id'],PDO::PARAM_INT);
              $qinsertPay->execute();              
         }
+    }
 
+    public function getIncomeCategories()
+    {
+        //$userData= static::findByEmail($this->email);
+        $db = static::getDB();
+        $qgetCopyIncomes=$db->prepare("SELECT * from public.incomes_category_assigned_to_users WHERE user_id = :user_id");
+        $qgetCopyIncomes->bindValue('user_id',$_SESSION['user_id'],PDO::PARAM_INT);
+        $qgetCopyIncomes->execute();
+        $copyIncomes=$qgetCopyIncomes->fetchAll();
+        return $copyIncomes;
 
+    }
+    public function getExpenseCategories()
+    {
+        //$userData= static::findByEmail($this->email);
+        $db = static::getDB();
+        $qgetCopyExpenses=$db->prepare("SELECT * from public.expenses_category_assigned_to_users WHERE user_id = :user_id");
+        $qgetCopyExpenses->bindValue('user_id',$_SESSION['user_id'],PDO::PARAM_INT);
+        $qgetCopyExpenses->execute();
+        $copyExpenses=$qgetCopyExpenses->fetchAll();
+        return $copyExpenses;
+
+    }
+    public function getPaymentCategories()
+    {
+        //$userData= static::findByEmail($this->email);
+        $db = static::getDB();
+        $qgetCopyPayments=$db->prepare("SELECT * from public.payment_methods_assigned_to_users WHERE user_id = :user_id");
+        $qgetCopyPayments->bindValue('user_id',$_SESSION['user_id'],PDO::PARAM_INT);
+        $qgetCopyPayments->execute();
+        $copyPayments=$qgetCopyPayments->fetchAll();
+        return $copyPayments;
 
     }
 

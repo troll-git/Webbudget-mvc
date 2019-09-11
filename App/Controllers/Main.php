@@ -8,6 +8,7 @@ use \App\Models\Income;
 use \App\Models\Expense;
 use \App\Models\Balance;
 use App\Flash;
+use App\Models\User;
 use PDO;
 
 
@@ -30,7 +31,18 @@ class Main extends Authenticated
 
     public function balanceAction()
     {
-        View::renderTemplate('Main/balance.html');
+        $this->createBalanceAction();
+        //View::renderTemplate('Main/balance.html');
+    }
+
+    public function settingsAction()
+    {
+        $user= new User();
+        $result=[];
+        $result['income_cat']=$user->getIncomeCategories();
+        $result['expense_cat']=$user->getExpenseCategories();
+        $result['pay_cat']=$user->getPaymentCategories();
+        View::renderTemplate('Main/settings.html',$result);
     }
     public function createIncomeAction()
     {
