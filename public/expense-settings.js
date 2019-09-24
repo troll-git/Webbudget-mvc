@@ -6,11 +6,13 @@ function editDeleteExpenses() {
     $(obj).find("#enable-lim").click(function () {
       if ($(this).prop("checked") == true) {
         $(obj).find("#form-expense-lim").prop('disabled', false);
-        $(obj).find("#form-expense-lim").val() == "";
+        
 
       }
       else if ($(this).prop("checked") == false) {
+        $(obj).find("#form-expense-lim").val("");
         $(obj).find("#form-expense-lim").prop('disabled', true);
+        
       }
     })
     //
@@ -88,10 +90,13 @@ $(document).ready(function () {
   $(".expense-settings").each(function (i, obj) {
     if ($(obj).find(".limit-notification").html() == "Limit: ") {
       $(obj).find(".limit-notification").hide();
+      $(obj).find("#enable-lim").prop('checked', false);
+      $(obj).find("#form-expense-lim").prop('disabled', true);
 
     }
     else {
       $(obj).find("#enable-lim").prop('checked', true);
+      $(obj).find("#form-expense-lim").prop('disabled', false);
     }
   })
   editDeleteExpenses();
