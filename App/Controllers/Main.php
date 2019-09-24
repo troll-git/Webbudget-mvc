@@ -17,16 +17,21 @@ class Main extends Authenticated
     public function newAction()
     {
         View::renderTemplate('Main/new.html');
-        
     }
     public function incomeAction()
     {
-        View::renderTemplate('Main/income.html');
-        
+        $user = new User();
+        $result = [];
+        $result['income_cat'] = $user->getIncomeCategories();
+        View::renderTemplate('Main/income.html', $result);
     }
     public function expenseAction()
     {
-        View::renderTemplate('Main/expense.html');
+        $user = new User();
+        $result = [];
+        $result['expense_cat'] = $user->getExpenseCategories();
+        $result['pay_cat'] = $user->getPaymentCategories();
+        View::renderTemplate('Main/expense.html', $result);
     }
 
     public function balanceAction()
@@ -37,62 +42,57 @@ class Main extends Authenticated
 
     public function settingsAction()
     {
-        $user= new User();
-        $result=[];
-        $result['income_cat']=$user->getIncomeCategories();
-        $result['expense_cat']=$user->getExpenseCategories();
-        $result['pay_cat']=$user->getPaymentCategories();
-        View::renderTemplate('Main/settings.html',$result);
+        $user = new User();
+        $result = [];
+        $result['income_cat'] = $user->getIncomeCategories();
+        $result['expense_cat'] = $user->getExpenseCategories();
+        $result['pay_cat'] = $user->getPaymentCategories();
+        View::renderTemplate('Main/settings.html', $result);
     }
     public function createIncomeAction()
     {
-        $income= new Income($_POST);
+        $income = new Income($_POST);
         $income->save();
-        Flash::addMessage('Pomyslnie dodano nowy przychod',FLASH::INFO);
+        Flash::addMessage('Pomyslnie dodano nowy przychod', FLASH::INFO);
         $this->redirect('/main/income');
 
         //var_dump($_POST);
     }
     public function createExpenseAction()
     {
-        $expense= new Expense($_POST);
+        $expense = new Expense($_POST);
         $expense->save();
-        Flash::addMessage('Pomyslnie dodano nowy wydatek',FLASH::INFO);
+        Flash::addMessage('Pomyslnie dodano nowy wydatek', FLASH::INFO);
         $this->redirect('/main/expense');
 
         //var_dump($_POST);
-    }    
+    }
     public function createBalanceAction()
     {
-        $inc=Income::getIncomes();
-        $incomecat=Income::getIncomeCat();
-        $exp=Expense::getExpenses();
-        $expensecat=Expense::getExpenseCat();
-        
-        $result=[];
-        $result['incomes']=$inc;
-        $result['incomes_sum']=Income::getSumIncomes($inc);
-        $result['expenses']=$exp;
-        $result['expenses_sum']=Expense::getSumExpenses($exp);
-        //var_dump(Expense::getSumExpenses($exp));
-        if (empty($inc)){
-            Flash::addMessage('Brak przychodow w wybranym okresie',FLASH::INFO);
+        $inc = Income::getIncomes();
+        $incomecat = Income::getIncomeCat();
+        $exp = Expense::getExpenses();
+        $expensecat = Expense::getExpenseCat();
+
+        $result = [];
+        $result['incomes'] = $inc;
+        $result['incomes_sum'] = Income::getSumIncomes($inc);
+        $result['expenses'] = $exp;
+        $result['expenses_sum'] = Expense::getSumExpenses($exp);
+        if (empty($inc)) {
+            Flash::addMessage('Brak przychodow w wybranym okresie', FLASH::INFO);
         }
-        if (empty($exp)){
-            Flash::addMessage('Brak wydatkow w wybranym okresie',FLASH::INFO);
+        if (empty($exp)) {
+            Flash::addMessage('Brak wydatkow w wybranym okresie', FLASH::INFO);
         }
-        $balance=new Balance;
-        $saldo=$balance->getBalance(Income::getSumIncomes($inc),Expense::getSumExpenses($exp));
-        $result['balance']=$saldo;
-        if($saldo<=0){
-            $result['infobalance']='Jesteś na minusie. Musisz oszczędzać';
+        $balance = new Balance;
+        $saldo = $balance->getBalance(Income::getSumIncomes($inc), Expense::getSumExpenses($exp));
+        $result['balance'] = $saldo;
+        if ($saldo <= 0) {
+            $result['infobalance'] = 'Jesteś na minusie. Musisz oszczędzać';
+        } else {
+            $result['infobalance'] = 'Nieźle zarządzasz pieniędzmi. Tak trzymać!';
         }
-        else {
-            $result['infobalance']='Nieźle zarządzasz pieniędzmi. Tak trzymać!';
-        }
-        View::renderTemplate('Main/balance.html',$result);
+        View::renderTemplate('Main/balance.html', $result);
     }
-    
 }
-
-
