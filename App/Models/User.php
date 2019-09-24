@@ -102,7 +102,7 @@ class User extends \Core\Model
     {
         //$userData= static::findByEmail($this->email);
         $db = static::getDB();
-        $qgetCopyIncomes=$db->prepare("SELECT * from public.incomes_category_assigned_to_users WHERE user_id = :user_id");
+        $qgetCopyIncomes=$db->prepare("SELECT * from public.incomes_category_assigned_to_users WHERE user_id = :user_id ORDER BY id");
         $qgetCopyIncomes->bindValue('user_id',$_SESSION['user_id'],PDO::PARAM_INT);
         $qgetCopyIncomes->execute();
         $copyIncomes=$qgetCopyIncomes->fetchAll();
@@ -113,7 +113,7 @@ class User extends \Core\Model
     {
         //$userData= static::findByEmail($this->email);
         $db = static::getDB();
-        $qgetCopyExpenses=$db->prepare("SELECT * from public.expenses_category_assigned_to_users WHERE user_id = :user_id");
+        $qgetCopyExpenses=$db->prepare("SELECT * from public.expenses_category_assigned_to_users WHERE user_id = :user_id ORDER BY id");
         $qgetCopyExpenses->bindValue('user_id',$_SESSION['user_id'],PDO::PARAM_INT);
         $qgetCopyExpenses->execute();
         $copyExpenses=$qgetCopyExpenses->fetchAll();
@@ -124,7 +124,7 @@ class User extends \Core\Model
     {
         //$userData= static::findByEmail($this->email);
         $db = static::getDB();
-        $qgetCopyPayments=$db->prepare("SELECT * from public.payment_methods_assigned_to_users WHERE user_id = :user_id");
+        $qgetCopyPayments=$db->prepare("SELECT * from public.payment_methods_assigned_to_users WHERE user_id = :user_id ORDER BY id");
         $qgetCopyPayments->bindValue('user_id',$_SESSION['user_id'],PDO::PARAM_INT);
         $qgetCopyPayments->execute();
         $copyPayments=$qgetCopyPayments->fetchAll();
@@ -231,5 +231,48 @@ class User extends \Core\Model
 
         return $stmt->execute();
     }
+    public static function changePayList($post)
+    {
+        $sql = "UPDATE payment_methods_assigned_to_users SET name = :name WHERE user_id =:user_id AND id=:id";
+    
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':user_id',$_SESSION['user_id'],PDO::PARAM_INT);  
+        $stmt->bindValue(':name',$post['name'],PDO::PARAM_STR);
+        $stmt->bindValue(':id',$post['id'],PDO::PARAM_INT);
+        $stmt->execute();
+
+        //return $incomecat=$stmt->fetchAll();
+    }
+    public static function addPayCat($post)
+    {
+        $sql = 'INSERT INTO payment_methods_assigned_to_users VALUES (:user_id, :name, :id)';
+        $sqlgetmax='SELECT MAX(id) FROM payment_methods_assigned_to_users WHERE user_id=:user_id';
+    
+        $db = static::getDB();
+        $max = $db->prepare($sqlgetmax);
+        $max->bindValue(':user_id',$_SESSION['user_id'],PDO::PARAM_INT);
+        $max->execute();
+        $maxval=$max->fetch();
+        $maxval=$maxval[0]+1;
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':user_id',$_SESSION['user_id'],PDO::PARAM_INT);  
+        $stmt->bindValue(':name',$post['name'],PDO::PARAM_STR);
+        $stmt->bindValue(':id',$maxval,PDO::PARAM_STR);
+        $stmt->execute();
+        return $maxval;
+        //return $incomecat=$stmt->fetchAll();
+    }    
+    public static function removePayCat($post)
+    {
+        $sql = 'DELETE FROM payment_methods_assigned_to_users WHERE name=:name AND user_id=:user_id';
+        $catname=strval($post['name']);
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':name',$catname,PDO::PARAM_STR);
+        $stmt->bindValue(':user_id',$_SESSION['user_id'],PDO::PARAM_INT);  
+        $stmt->execute();
+        return $post['name'];
+    }       
 }
 

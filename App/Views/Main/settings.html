@@ -4,13 +4,14 @@
 
 
 {% block body %}
+
 <div class="col-6 mx-auto">
 
     <div id="accordion">
         <div class="card">
           <div class="card-header" id="headingOne">
             <h5 class="mb-0">
-              <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+              <button class="btn btn-link " data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                 Edytuj kategorie przychodow
               </button>
             </h5>
@@ -18,20 +19,70 @@
           <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
             <div class="card-body">
                 {% for cats in income_cat %}
-                <div class="form-group">
-                        <div class="input-group-prepend mb-2">
-                                <div class="input-group-text">
-                                    {{ cats.name }}
-                                </div>
-                                <button class="btn btn-primary pull-right" type="submit" data-toggle="modal" id={{cats.name}} data-target="#editIncomeCatModal{{cats.id}}">edytuj</button>
-                                <button class="btn btn-primary" type="submit">usun</button>
-                            </div>
+                <div class="income-settings">
+                  <div class="form-group">
+                    <div class="input-group-prepend mb-2">
+                            <div class="input-group-text income-id">{{ cats.id }}</div>
+                            <div class="form-control input-group-text income-name">{{ cats.name }}</div>
+                            <button class="btn btn-primary pull-right edit-income-cat" type="submit" data-toggle="modal" data-target="#editIncomeCatModal{{cats.id}}">edytuj</button>
+                            <button class="btn btn-primary delete-income-cat" type="submit" data-toggle="modal" data-target="#deleteIncomeCatModal{{cats.id}}">usun</button>
+                        </div>
+            </div>
+            <div class="modal fade modal-income-edit" id="editIncomeCatModal{{cats.id}}" tabindex="-1" role="dialog">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Edytuj kategorie przychodow</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                          <div class="form-group">
+                                  <label>nazwa kategorii</label>
+                                  
+                                  <input type="text" class="form-control form-income" value="{{ cats.name }}">
+                          </div>
+                  </div>
+                  <div class="modal-footer">
+                    <a href="#" data-role="{{cats.id}}" id="submitInc" class="btn btn-primary pull-right save-income">Zapisz</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                  </div>
                 </div>
-                <div class="modal fade" id="editIncomeCatModal{{cats.id}}" tabindex="-1" role="dialog">
+              </div>
+            </div>
+            <div class="modal fade modal-income-delete" id="deleteIncomeCatModal{{cats.id}}" tabindex="-1" role="dialog">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Usuwanie kategorie przychodow</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                          <div class="form-group">
+                                  
+                                  <h2>Na pewno chcesz usunac kategorie {{cats.name}} ?</h2>
+                          </div>
+                  </div>
+                  <div class="modal-footer">
+                    <a href="#" data-role="{{cats.id}}" class="btn btn-primary pull-right delete-income">Usun</a>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+                </div>
+    
+                {% endfor %}
+                <button class="btn btn-primary btn-block" type="submit" data-toggle="modal" data-target="#add-income-cat">Dodaj kategorie</button>
+                <div class="modal fade modal-income-add" id="add-income-cat" tabindex="-1" role="dialog">
                   <div class="modal-dialog" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title">Edytuj kategorie przychodow</h5>
+                        <h5 class="modal-title">Dodaj kategorie przychodow</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                         </button>
@@ -39,19 +90,16 @@
                       <div class="modal-body">
                               <div class="form-group">
                                       <label>nazwa kategorii</label>
-                                      
-                                      <input type="text" id="cats.name" class="form-control" value="{{cats.name}}">
+                                      <input type="text" id="form-add-income-cat" class="form-control">
                               </div>
                       </div>
                       <div class="modal-footer">
-                        <a href="#" data-role="update" data-id="{{cats.id}}" id="editIncomes" class="btn btn-primary pull-right">Zapisz</a>
+                        <a href="#" id="submit-new-income-cat" class="btn btn-primary pull-right">Zapisz</a>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
                       </div>
                     </div>
                   </div>
-                </div>    
-                {% endfor %}
-                <button class="btn btn-primary btn-block" type="submit">Dodaj kategorie</button>
+                </div>
 
                 
             </div>
@@ -68,14 +116,94 @@
           <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
             <div class="card-body">
                     {% for cats in expense_cat %}
-                    <tr><td>{{ cats.name }}{{cats.id}}</td></tr>
-                    <br>
+                    <div class="expense-settings">
+                        <div class="form-group">
+                          <div class="input-group mb-2">
+                              <div class="input-group-prepend">
+                                  <div class="input-group-text expense-id">{{ cats.id }}</div>
+                              </div>
+                                  <div class="form-control input-group-text expense-name">{{ cats.name }}</div>
+                                    <button class="btn btn-primary pull-right edit-expense-cat" type="submit" data-toggle="modal" data-target="#editExpenseCatModal{{cats.id}}">Edytuj</button>
+                                    <button class="btn btn-primary delete-expense-cat" type="submit" data-toggle="modal" data-target="#deleteExpenseCatModal{{cats.id}}">Usuń</button>
+                                  
+                          </div>
+                  </div>
+                  <div class="modal fade modal-expense-edit" id="editExpenseCatModal{{cats.id}}" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">Edytuj kategorie wydatków</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                                <div class="form-group">
+                                        <label>nazwa kategorii</label>
+                                        
+                                        <input type="text" class="form-control form-expense" value="{{ cats.name }}">
+                                </div>
+                        </div>
+                        <div class="modal-footer">
+                          <a href="#" data-role="{{cats.id}}" id="submitExp" class="btn btn-primary pull-right save-expense">Zapisz</a>
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal fade modal-expense-delete" id="deleteExpenseCatModal{{cats.id}}" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">Usuwanie kategorii wydatków</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                                <div class="form-group">
+                                        
+                                        <h2>Na pewno chcesz usunąć kategorie {{cats.name}} ?</h2>
+                                </div>
+                        </div>
+                        <div class="modal-footer">
+                          <a href="#" data-role="{{cats.id}}" class="btn btn-primary pull-right delete-expense">Usun</a>
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+      
+                      </div>
 
                     {% endfor %}
-                    <button class="btn btn-primary btn-block" type="submit">Zatwierdź</button>
+                    <button class="btn btn-primary btn-block" type="submit" data-toggle="modal" data-target="#add-expense-cat">Dodaj kategorie</button>
+                <div class="modal fade modal-expense-add" id="add-expense-cat" tabindex="-1" role="dialog">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title">Dodaj kategorie wydatkow</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                              <div class="form-group">
+                                      <label>nazwa kategorii</label>
+                                      <input type="text" id="form-add-expense-cat" class="form-control">
+                              </div>
+                      </div>
+                      <div class="modal-footer">
+                        <a href="#" id="submit-new-expense-cat" class="btn btn-primary pull-right">Zapisz</a>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
             </div>
           </div>
         </div>
+
         <div class="card">
           <div class="card-header" id="headingThree">
             <h5 class="mb-0">
@@ -87,9 +215,90 @@
           <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
             <div class="card-body">
                     {% for cats in pay_cat %}
-                    <tr><td>{{ cats.name }}</td></tr>
-                    <br>
+                    <div class="pay-settings">
+                        <div class="form-group">
+                          <div class="input-group mb-2">
+                              <div class="input-group-prepend">
+                                  <div class="input-group-text pay-id">{{ cats.id }}</div>
+                              </div>
+                                  <div class="form-control input-group-text pay-name">{{ cats.name }}</div>
+                                    <button class="btn btn-primary pull-right edit-pay-cat" type="submit" data-toggle="modal" data-target="#editPayCatModal{{cats.id}}">Edytuj</button>
+                                    <button class="btn btn-primary delete-pay-cat" type="submit" data-toggle="modal" data-target="#deletePayCatModal{{cats.id}}">Usuń</button>
+                                  
+                          </div>
+                  </div>
+                  <div class="modal fade modal-pay-edit" id="editPayCatModal{{cats.id}}" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">Edytuj metody platnosci</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                                <div class="form-group">
+                                        <label>nazwa kategorii</label>
+                                        
+                                        <input type="text" class="form-control form-pay" value="{{ cats.name }}">
+                                </div>
+                        </div>
+                        <div class="modal-footer">
+                          <a href="#" data-role="{{cats.id}}" id="submitPay" class="btn btn-primary pull-right save-pay">Zapisz</a>
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal fade modal-pay-delete" id="deletePayCatModal{{cats.id}}" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title">Usuwanie metod platnosci</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                                <div class="form-group">
+                                        
+                                        <h2>Na pewno chcesz usunąć metode {{cats.name}} ?</h2>
+                                </div>
+                        </div>
+                        <div class="modal-footer">
+                          <a href="#" data-role="{{cats.id}}" class="btn btn-primary pull-right delete-pay">Usun</a>
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+      
+                      </div>
+
                     {% endfor %}
+                    <button class="btn btn-primary btn-block" type="submit" data-toggle="modal" data-target="#add-pay-cat">Dodaj metode platnosci</button>
+                    <div class="modal fade modal-pay-add" id="add-pay-cat" tabindex="-1" role="dialog">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title">Dodaj metode platnosci</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-body">
+                                  <div class="form-group">
+                                          <label>nazwa kategorii</label>
+                                          <input type="text" id="form-add-pay-cat" class="form-control">
+                                  </div>
+                          </div>
+                          <div class="modal-footer">
+                            <a href="#" id="submit-new-pay-cat" class="btn btn-primary pull-right">Zapisz</a>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
             </div>
           </div>
         </div>
@@ -110,4 +319,111 @@
       </div>
 
 </div>
+<script src="/incomes-settings.js" type="text/javascript"></script>
+<script src="/expense-settings.js" type="text/javascript"></script>
+<script>
+  //edit-delete
+  function editDelete(){
+    $('.pay-settings').each(function (i, obj) {
+      $(obj).find(".save-pay").click(function () {
+        var name = $(obj).find(".form-pay").val();
+        var id = $(obj).find(".pay-id").html();
+
+        var data = {
+          name: name,
+          id: id,
+        }
+        $.ajax({
+          type: "POST",
+          url: "/ajax/changePay",
+          data: data,
+          dataType: "json",
+          success: function (json) { /*Funkcja zawiera parametr*/
+            $(obj).find(".pay-name").html(json.name);
+            $(obj).find(".form-pay").val(json.name);
+            var message="Czy na pewno chcesz usunac "+json.name+"?";
+            $(obj).find(".form-group").find('h2').html(message);
+            $(obj).find('.modal-pay-edit').modal('hide');
+          },
+          error: function (blad) {
+            alert("errors");
+            console.log(blad);
+          }
+        })
+      })
+      //usuwanie kategorii przychodu
+      $(obj).find(".delete-pay").click(function () {
+        var name = $(obj).find(".pay-name").html();
+        var data = {
+          name: name,
+        }
+        $.ajax({
+          type: "POST",
+          url: "/ajax/removePayCat",
+          data: data,
+          dataType: "json",
+          success: function (json) {
+            
+            if ($(obj).find(".pay-name").html() == json) {
+              $(obj).hide();
+            }
+            $('.modal-pay-delete').modal('hide');
+          },
+          error: function (blad) {
+            alert("errors");
+            console.log(blad);
+          }
+        })
+
+      })
+    })
+  }
+
+  $(document).ready(function () {
+    editDelete();
+  
+
+//dodanie nowej kategorii
+$("#submit-new-pay-cat").click(function(){
+  var name=$("#form-add-pay-cat").val();
+  var data={
+          name:name,
+          }
+          
+          $.ajax({
+            type:"POST", 
+            url: "/ajax/addPayCat",
+            data: data,
+            dataType: "json",
+                success: function(json) { 
+                      //$(obj).find(".income-name").html(json.name);
+                      //alert(json);
+                      
+                      var $newPayCategory = $(".pay-settings").last().clone();
+                      $newPayCategory.find(".pay-id").html(json);
+                      $newPayCategory.find(".pay-name").html(name);
+                      $newDt= "editPayCatModal"+ json;
+                      $newPayCategory.find(".edit-pay-cat").attr("data-target",('#'+$newDt));
+                      $newPayCategory.find(".modal-pay-edit").attr("id",$newDt);
+                      $newPayCategory.find(".delete-pay-cat").attr("data-target",('#deletePayCatModal'+json));
+                      $newPayCategory.find(".modal-pay-delete").attr("id",('deletePayCatModal'+json));
+                      //var newId="editIncomeCatModal"+json;
+                      
+                      $newPayCategory.find(".form-pay").val(name);
+                      var message="Czy na pewno chcesz usunac "+name+"?";
+                      $newPayCategory.find(".form-group").find('h2').html(message);
+                      //$newIncomeCategory.find(".edit-income-cat").attr("id","newId");
+                      $(".pay-settings").last().append($newPayCategory); 
+                      $('.modal-pay-add').modal('hide');
+                      editDelete();
+                },
+                error: function(blad) {
+                    alert( "errors");
+                    console.log(blad);
+                }
+        })
+})
+
+});
+</script>
 {% endblock %}

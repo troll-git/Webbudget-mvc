@@ -92,6 +92,48 @@ class Expense extends \Core\Model
         }
         return $sum_exp;
     }
-        
+    public static function changeExpensesList($post)
+    {
+        $sql = "UPDATE expenses_category_assigned_to_users SET name = :name WHERE user_id =:user_id AND id=:id";
+    
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':user_id',$_SESSION['user_id'],PDO::PARAM_INT);  
+        $stmt->bindValue(':name',$post['name'],PDO::PARAM_STR);
+        $stmt->bindValue(':id',$post['id'],PDO::PARAM_INT);
+        $stmt->execute();
+
+        //return $incomecat=$stmt->fetchAll();
+    }
+    public static function addExpenseCat($post)
+    {
+        $sql = 'INSERT INTO expenses_category_assigned_to_users VALUES (:user_id, :name, :id)';
+        $sqlgetmax='SELECT MAX(id) FROM expenses_category_assigned_to_users WHERE user_id=:user_id';
+    
+        $db = static::getDB();
+        $max = $db->prepare($sqlgetmax);
+        $max->bindValue(':user_id',$_SESSION['user_id'],PDO::PARAM_INT);
+        $max->execute();
+        $maxval=$max->fetch();
+        $maxval=$maxval[0]+1;
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':user_id',$_SESSION['user_id'],PDO::PARAM_INT);  
+        $stmt->bindValue(':name',$post['name'],PDO::PARAM_STR);
+        $stmt->bindValue(':id',$maxval,PDO::PARAM_STR);
+        $stmt->execute();
+        return $maxval;
+        //return $incomecat=$stmt->fetchAll();
+    }    
+    public static function removeExpenseCat($post)
+    {
+        $sql = 'DELETE FROM expenses_category_assigned_to_users WHERE name=:name AND user_id=:user_id';
+        $catname=strval($post['name']);
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':name',$catname,PDO::PARAM_STR);
+        $stmt->bindValue(':user_id',$_SESSION['user_id'],PDO::PARAM_INT);  
+        $stmt->execute();
+        return $post['name'];
+    }        
     
 }
