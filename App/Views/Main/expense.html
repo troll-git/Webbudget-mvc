@@ -98,7 +98,7 @@
                     var sum_exp = json[1];
                     var totalAmount = Number(amount) + Number(sum_exp);
                     var difference = totalAmount - lim_exp;
-                    if (Number(lim_exp) >= totalAmount) {
+                    if ((Number(lim_exp) >= totalAmount)||(!lim_exp)) {
                         $(".alert").addClass("hidden");
                     }
                     else if (Number(lim_exp) < totalAmount) {
