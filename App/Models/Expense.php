@@ -80,6 +80,34 @@ class Expense extends \Core\Model
 
         return $expTable;
     }
+    public static function getExpensesMonth()
+    {
+        $db = static::getDB();
+        $daterange = Balance::getMonthRange();
+        $expensecat = Expense::getExpenseCat();
+        //$queryExpSum=$db->prepare("SELECT SUM(amount) from public.expenses where user_id=:user_id and date_of_expense BETWEEN :date_from and :date_to");
+        //$queryExpSum->bindValue(':user_id',$_SESSION['user_id'],PDO::PARAM_INT);
+        //$queryExpSum->bindValue(':date_from',$daterange[0],PDO::PARAM_STR);
+        //$queryExpSum->bindValue(':date_to',$daterange[1],PDO::PARAM_STR);
+        //$queryExpSum->execute();
+        //$expSumAll=$queryExpSum->fetchAll();
+        $queryExp = $db->prepare("SELECT expense_category_assigned_to_user_id,SUM(amount) from public.expenses where user_id=:user_id and date_of_expense BETWEEN :date_from and :date_to GROUP BY expense_category_assigned_to_user_id");
+        $queryExp->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+        $queryExp->bindValue(':date_from', $daterange[0], PDO::PARAM_STR);
+        $queryExp->bindValue(':date_to', $daterange[1], PDO::PARAM_STR);
+        $queryExp->execute();
+        $expTable = $queryExp->fetchAll();
+
+        foreach ($expTable as &$expense) {
+            foreach ($expensecat as $cat) {
+                if ($expense['expense_category_assigned_to_user_id'] == $cat['id']) {
+                    $expense['cat_name'] = $cat['name'];
+                }
+            }
+        }
+
+        return $expTable;
+    }
 
     public static function getSumExpenses($expenses_array)
     {
@@ -129,12 +157,18 @@ class Expense extends \Core\Model
     public static function removeExpenseCat($post)
     {
         $sql = 'DELETE FROM expenses_category_assigned_to_users WHERE name=:name AND user_id=:user_id';
+        $sqlUpdate='UPDATE expenses SET expense_category_assigned_to_user_id = 0 WHERE user_id =:user_id AND expense_category_assigned_to_user_id = :id';
         $catname = strval($post['name']);
+        $catid=strval($post['id']);
         $db = static::getDB();
         $stmt = $db->prepare($sql);
+        $stmt2 = $db->prepare($sqlUpdate);
         $stmt->bindValue(':name', $catname, PDO::PARAM_STR);
         $stmt->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
         $stmt->execute();
+        $stmt2->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+        $stmt2->bindValue(':id', $catid, PDO::PARAM_INT);
+        $stmt2->execute();
         return $post['name'];
     }
 }

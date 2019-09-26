@@ -123,12 +123,18 @@ class Income extends \Core\Model
     public static function removeIncomeCat($post)
     {
         $sql = 'DELETE FROM incomes_category_assigned_to_users WHERE name=:name AND user_id=:user_id';
+        $sqlUpdate='UPDATE incomes SET income_category_assigned_to_user_id = 0 WHERE user_id =:user_id AND income_category_assigned_to_user_id = :id';
         $catname=strval($post['name']);
+        $catid=strval($post['id']);
         $db = static::getDB();
         $stmt = $db->prepare($sql);
+        $stmt2 = $db->prepare($sqlUpdate);
         $stmt->bindValue(':name',$catname,PDO::PARAM_STR);
         $stmt->bindValue(':user_id',$_SESSION['user_id'],PDO::PARAM_INT);  
         $stmt->execute();
+        $stmt2->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+        $stmt2->bindValue(':id', $catid, PDO::PARAM_INT);
+        $stmt2->execute();
         return $post['name'];
     }    
 }

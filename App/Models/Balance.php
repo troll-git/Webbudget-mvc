@@ -59,7 +59,28 @@ class Balance extends \Core\Model
     $range[]=$date_from;
     $range[]=$date_to;
     return $range;
-    }    
+    }
+    
+    public static function getMonthRange()
+    {
+        $range=[];
+        if (isset($_POST['date_of_expense'])){
+
+            
+                $date_current=$_POST['date_of_expense'];
+                $date_from=date('Y-m-01', strtotime($date_current));
+                $date_to=date('Y-m-t', strtotime($date_current));    
+            
+    }
+    if (!isset($_POST['balance'])){
+        $date_from=date("Y-m-01");
+        $date_to=date("Y-m-d");
+    }
+    $range[]=$date_from;
+    $range[]=$date_to;
+    return $range;
+    }
+
     public function getBalance($incomes,$expenses)
     {
         $balance=$incomes-$expenses;

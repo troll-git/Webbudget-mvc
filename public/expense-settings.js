@@ -60,9 +60,12 @@ function editDeleteExpenses() {
     //usuwanie kategorii przychodu
     $(obj).find(".delete-expense").click(function () {
       var name = $(obj).find(".expense-name").html();
+      var id = $(obj).find(".expense-id").html();
       var data = {
         name: name,
+        id:id,
       }
+      alert(id);
       $.ajax({
         type: "POST",
         url: "/ajax/removeExpenseCat",

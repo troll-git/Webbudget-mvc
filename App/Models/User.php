@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Token;
 use App\Flash;
+use \App\Models\Expense;
+
 
 use PDO;
 
@@ -273,12 +275,37 @@ class User extends \Core\Model
     }
     public static function checkLimit($post)
     {
+        //get range
+        $date_from=date('Y-m-01', strtotime($post['date_of_expense']));
+        $date_to=date('Y-m-t', strtotime($post['date_of_expense'])); 
+        //$daterange = Balance::getMonthRange();
         $sql = 'SELECT limit_exp FROM expenses_category_assigned_to_users WHERE id=:id AND user_id=:user_id';
         $db = static::getDB();
         $stmt = $db->prepare($sql);
         $stmt->bindValue(':id', $post['id'], PDO::PARAM_INT);
         $stmt->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetch();
+        $limit_exp=$stmt->fetch();
+
+
+        $queryExp = $db->prepare("SELECT SUM(amount) from expenses where user_id=:user_id and expense_category_assigned_to_user_id=:id and date_of_expense BETWEEN :date_from and :date_to");
+        $queryExp->bindValue(':id', $post['id'], PDO::PARAM_INT);
+        $queryExp->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+        $queryExp->bindValue(':date_from', $date_from, PDO::PARAM_STR);
+        $queryExp->bindValue(':date_to', $date_to, PDO::PARAM_STR);
+        $queryExp->execute();
+        $sumExp=$queryExp->fetch();
+        $report[]=$limit_exp['limit_exp'];
+        $report[]=$sumExp['sum'];
+        return $report;
+    }
+    public static function changeUsername($post)
+    {
+        $sql = 'UPDATE users SET username = :username WHERE id =:user_id';
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+        $stmt->bindValue(':username', $post['username'], PDO::PARAM_STR);
+        $stmt->bindValue(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+        $stmt->execute();
     }
 }

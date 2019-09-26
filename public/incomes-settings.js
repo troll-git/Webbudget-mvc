@@ -30,9 +30,12 @@ function editDeleteIncomes() {
     //usuwanie kategorii przychodu
     $(obj).find(".delete-income").click(function () {
       var name = $(obj).find(".income-name").html();
+      var id = $(obj).find(".income-id").html();
       var data = {
         name: name,
+        id:id,
       }
+      alert(id);
       $.ajax({
         type: "POST",
         url: "/ajax/removeIncomeCat",

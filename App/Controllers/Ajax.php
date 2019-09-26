@@ -84,4 +84,12 @@ class Ajax extends \Core\Controller
 
         echo json_encode($json);
     }
+    public function changeUsernameAction()
+    {
+        $username = $_POST;
+        $json = User::changeUsername($username);
+        //Flash::addMessage('osiagnieto limit',FLASH::WARNING);
+
+        echo json_encode($username);
+    }
 }

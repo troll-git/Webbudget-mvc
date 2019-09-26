@@ -9,9 +9,12 @@
     <div class="col-6 mx-auto">
         <div class="form-group">
             <label for="kwota">Podaj kwotę</label>
-            <div class="alert alert-danger hidden" role="alert">
-                
-            </div>
+            <div class="alert alert-danger hidden" role="alert"></div>
+            <div class="text-center">
+                    <div class="spinner-border" role="status" style='display: none;'>
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                  </div>
             <div class="input-group mb-2">
                 <div class="input-group-prepend">
                     <div class="input-group-text"><i class="icon-dollar"></i></div>
@@ -25,7 +28,7 @@
                 <div class="input-group-prepend">
                     <div class="input-group-text"><i class="icon-calendar"></i></div>
                 </div>
-                <input type="date" class="form-control" name="date" id="today">
+                <input type="date" class="form-control invent" name="date" id="today">
             </div>
         </div>
         <div class="form-group">
@@ -73,30 +76,39 @@
         $(".invent").change(function () {
 
             var idCat = $("#kategoria").val();
+            var amount = $("#kwota").val();
+            var date = $("#today").val();
             var data = {
                 id: idCat,
+                amount: amount,
+                date_of_expense: date,
             }
 
             $.ajax({
+
                 type: "POST",
                 url: "/ajax/checkLimit",
                 data: data,
                 dataType: "json",
+                beforeSend: function () {
+                    $('.spinner-border').show();
+                },
                 success: function (json) {
-                    var lim_exp = json['limit_exp'];
-                    var amount = $("#kwota").val();
-                    var lim_exc = amount - lim_exp;
-                    if ((lim_exc <= 0) || (lim_exp == null)) {
+                    var lim_exp = json[0];
+                    var sum_exp = json[1];
+                    var totalAmount = Number(amount) + Number(sum_exp);
+                    var difference = totalAmount - lim_exp;
+                    if (Number(lim_exp) >= totalAmount) {
                         $(".alert").addClass("hidden");
                     }
-                    else if (lim_exc > 0) {
-                        var message = "Miesieczny limit przekroczony. Dopuszczalny limit wynosi: " + lim_exp + ". Twoja kwota: " + amount + ". Przekroczono o: " + lim_exc + ".";
+                    else if (Number(lim_exp) < totalAmount) {
+                        var message = "Miesieczny limit przekroczony. Dopuszczalny limit wynosi: " + lim_exp + ". Twoja kwota: " + amount + ". Przekroczono o: " + difference + ".";
                         $(".alert").html(message);
                         $(".alert").removeClass("hidden");
                     }
-
-
-
+                },
+                complete: function () {
+                    $('.spinner-border').hide();
                 },
                 error: function (blad) {
                     alert("errors");

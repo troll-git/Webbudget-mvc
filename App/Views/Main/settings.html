@@ -305,17 +305,63 @@
             </div>
           </div>
         </div>
+        
         <div class="card">
                 <div class="card-header" id="headingFour">
                   <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseFour">
+                    <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
                           Edytuj Uzytkownika
                     </button>
                   </h5>
                 </div>
-                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+                <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
                   <div class="card-body">
-                        
+                      <button class="btn btn-primary btn-block" type="submit" data-toggle="modal" data-target="#edit-username">Zmien nazwe uzytkownika</button>
+                      <button class="btn btn-primary btn-block" type="submit" data-toggle="modal" data-target="#edit-password">Zmien haslo uzytkownika</button>
+                      <div class="modal fade " id="edit-username" tabindex="-1" role="dialog">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title">Zmien nazwe uzytkownika</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <div class="modal-body">
+                                      <div class="form-group">
+                                              <label>zmien nazwe uzytkownika</label>
+                                              <input type="text" id="form-edit-username" class="form-control" value="{{current_user.username}}">
+                                      </div>
+                              </div>
+                              <div class="modal-footer">
+                                <a href="#" id="submit-edit-username" class="btn btn-primary pull-right">Zapisz</a>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="modal fade modal-pay-add" id="edit-password" tabindex="-1" role="dialog">
+                            <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title">Zmien haslo uzytkownika</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                        <div class="form-group">
+                                                <label>zmien haslo</label>
+                                                <input type="text" id="form-edit-password" class="form-control" >
+                                        </div>
+                                </div>
+                                <div class="modal-footer">
+                                  <a href="#" id="submit-new-pay-cat" class="btn btn-primary pull-right">Zapisz</a>
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Anuluj</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>  
                   </div>
                 </div>
               </div>
@@ -325,4 +371,31 @@
 <script src="/incomes-settings.js" type="text/javascript"></script>
 <script src="/expense-settings.js" type="text/javascript"></script>
 <script src="/pay-settings.js" type="text/javascript"></script>
+<script>
+  $(document).ready(function () {
+    $("#submit-edit-username").click(function () {
+    var username = $("#form-edit-username").val();
+    var data = {
+      username: username,
+    }
+
+    $.ajax({
+      type: "POST",
+      url: "/ajax/changeUsername",
+      data: data,
+      dataType: "json",
+      success: function (json) {
+        $("#edit-username").modal('hide');
+        alert("zmieniono nazwe uzytkownika");
+      },
+      error: function (blad) {
+        alert("errors");
+        console.log(blad);
+      }
+    })
+  })
+  
+})
+</script>
+
 {% endblock %}

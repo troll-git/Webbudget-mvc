@@ -1,6 +1,6 @@
 
 body {
-    background-color: #CBCBCB;
+    background-color: rgb(229, 226, 226);
     margin:0 !important;
     font-family: 'Roboto Mono', monospace;
     font-size: 14px;
@@ -117,20 +117,20 @@ nav{
 
 #incomes {
     float:left;
-    background-color: #3FEC73;
+    /*background-color: #3FEC73;*/
     padding: 20px;
 }
 #expenses {
     float:left;
-    background-color: #FF897C;
+    /*background-color: #FF897C;*/
     padding: 20px;
 }
-#incomes table, #expenses table{
+/*#incomes table, #expenses table{
   border: 3px solid #000000;
   width: 100%;
   text-align: left;
   border-collapse: collapse;
-}
+}*/
 
 #incomes table thead, #expenses table thead {
     background: #CFCFCF;
@@ -179,3 +179,26 @@ aside {
 .hidden {
     display: none;
 }
+.plots {
+    background-color: yellow;
+}
+.loader {
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid blue;
+    border-bottom: 16px solid blue;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+  }
+  
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
